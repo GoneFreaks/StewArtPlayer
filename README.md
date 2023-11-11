@@ -1,7 +1,7 @@
 # StewArt
 
 ## Motivation
-The main idea was to develop an app to use the Discord-Bot Gruwie on your phone.
+The main idea is to develop an app to use the Discord-Bot Gruwie on your phone.
 This concept was changed pretty soon in order to better match the use-cases.
 
 ## Basic Functionality

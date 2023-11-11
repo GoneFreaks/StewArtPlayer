@@ -171,6 +171,7 @@ class SearcherState extends State<Searcher> {
   List<Widget> playlistToWidgetList(List<PlaylistDTO> playlists) {
     List<Widget> result = [];
     for(PlaylistDTO playlist in playlists) {
+      if(playlist.videos.isEmpty) continue;
       result.add(InkWell(
         onTap: () async {
           YoutubeExplode youtube = YoutubeExplode();

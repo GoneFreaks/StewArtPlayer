@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:stew_art_player/dto/download_dto.dart';
 import 'package:stew_art_player/dto/playlist_dto.dart';
@@ -81,13 +82,16 @@ void showLoadingDialog(BuildContext context, Video video, bool tempFile) {
   String downloadID = 'v ${video.id.toString()}';
 
   for (DownloadDTO downloadDTO in Holder.downloads) {
-    print("NOP");
-    if(downloadDTO.id.compareTo(downloadID) == 0) return;
+    if(downloadDTO.id.compareTo(downloadID) == 0) {
+      CoolAlert.show(context: context, type: CoolAlertType.error, title: "Video wird bereits heruntergeladen");
+      return;
+    }
   }
 
   Stream<double> stream = tempFile? loader.saveAudioAsTemporary(video, context) : loader.saveAudioAsPermanent(video, context, context);
   Holder.downloads.add(DownloadDTO(stream: stream, name: video.title, id: downloadID));
   Holder.newDownload.value = !Holder.newDownload.value;
+  CoolAlert.show(context: context, type: CoolAlertType.loading, text: "Downloadübersicht im Download-Center");
 }
 
 void showPlaylistLoadingDialog(BuildContext context, PlaylistDTO playlist) {
@@ -95,13 +99,16 @@ void showPlaylistLoadingDialog(BuildContext context, PlaylistDTO playlist) {
   String downloadID = 'p ${playlist.id}';
 
   for (DownloadDTO downloadDTO in Holder.downloads) {
-    print("NOP");
-    if(downloadDTO.id.compareTo(downloadID) == 0) return;
+    if(downloadDTO.id.compareTo(downloadID) == 0) {
+      CoolAlert.show(context: context, type: CoolAlertType.error, title: "Playlist wird bereits heruntergeladen");
+      return;
+    }
   }
 
   Stream<double> stream = loader.savePlaylist(playlist, context, context);
   Holder.downloads.add(DownloadDTO(stream: stream, name: playlist.title, id: downloadID));
   Holder.newDownload.value = !Holder.newDownload.value;
+  CoolAlert.show(context: context, type: CoolAlertType.loading, text: "Downloadübersicht im Download-Center");
 }
 
 void sortTracks(List<VideoDTO> videos, int filter) {
