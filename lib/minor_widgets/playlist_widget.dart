@@ -57,7 +57,7 @@ class PlaylistWidgetState extends State<PlaylistWidget>{
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
-                Text('${widget.playlist.videoCount} Tracks', style: Theme.of(context).textTheme.bodySmall,),
+                Text('${widget.playlist.videos.length} Tracks', style: Theme.of(context).textTheme.bodySmall,),
                 const Spacer(),
               ],
             ),

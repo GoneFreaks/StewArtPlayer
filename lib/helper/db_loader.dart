@@ -182,6 +182,17 @@ Future<void> deleteYTPlaylist(String playlistID) async {
   await db.rawDelete("DELETE FROM pPlaylists WHERE playlistID=?", [playlistID]);
 }
 
+Future<Set<String>> getAllTrackIDs() async {
+  Set<String> result = {};
+  for (Map<String, Object?> map in await db.rawQuery("SELECT id FROM tracks")) {
+    result.add(map["id"] as String);
+  }
+  for (Map<String, Object?> map in await db.rawQuery("SELECT id FROM pTracks")) {
+    result.add(map["id"] as String);
+  }
+  return result;
+}
+
 Future<List<VideoDTO>> getAllLocalTracks(BuildContext context) async {
   List<VideoDTO> temp = [];
   List<Map<String, Object?>> result = await db.rawQuery("SELECT * FROM tracks");
