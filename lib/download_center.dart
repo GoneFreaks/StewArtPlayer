@@ -1,7 +1,9 @@
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:stew_art_player/dto/download_dto.dart';
 import 'package:stew_art_player/helper/variable_holder.dart';
 import 'dto/theme_dto.dart';
+import 'helper/test_stream.dart' as test;
 
 class DownloadCenter extends StatefulWidget {
 
@@ -16,6 +18,7 @@ class DownloadCenterState extends State<DownloadCenter>{
   @override
   void initState() {
     super.initState();
+    if(Holder.downloads.isEmpty) Holder.downloads.add(DownloadDTO(name: "Test", stream: test.testStream(), id: "id"));
     Holder.newDownload.addListener(saveSetState);
   }
 
@@ -114,7 +117,7 @@ class DownloadCenterState extends State<DownloadCenter>{
                       )
                   ),
                   const SizedBox(width: 5,),
-                  if(snapshot.data != null) Text('${(snapshot.data! * 100).toStringAsFixed(0)}%', style: ThemeDTO.getBodyMedium(),),
+                  if(snapshot.data != null) AnimatedFlipCounter(value: snapshot.data! * 100, suffix: '%',),
                   const Spacer(flex: 1,),
                   Expanded(
                     flex: 12,
