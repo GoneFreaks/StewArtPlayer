@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stew_art_player/dto/download_dto.dart';
 import 'package:stew_art_player/helper/variable_holder.dart';
 import 'dto/theme_dto.dart';
-import 'helper/test_stream.dart' as test;
 
 class DownloadCenter extends StatefulWidget {
 
@@ -18,7 +17,6 @@ class DownloadCenterState extends State<DownloadCenter>{
   @override
   void initState() {
     super.initState();
-    if(Holder.downloads.isEmpty) Holder.downloads.add(DownloadDTO(name: "Test", stream: test.testStream(), id: "id"));
     Holder.newDownload.addListener(saveSetState);
   }
 
