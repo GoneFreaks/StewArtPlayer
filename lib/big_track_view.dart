@@ -27,6 +27,7 @@ class BigTrackViewState extends State<BigTrackView>{
     positionSub = Holder.handler.audioPlayer.positionStream.listen(positionListener);
     Holder.volume.addListener(saveSetState);
     Holder.repeatCurrent.addListener(saveSetState);
+    Holder.isRandomQueue.addListener(saveSetState);
   }
 
   @override
@@ -36,6 +37,7 @@ class BigTrackViewState extends State<BigTrackView>{
     positionSub.cancel();
     Holder.volume.removeListener(saveSetState);
     Holder.repeatCurrent.removeListener(saveSetState);
+    Holder.isRandomQueue.removeListener(saveSetState);
   }
 
   void durationListener(Duration? event) {
@@ -119,13 +121,7 @@ class BigTrackViewState extends State<BigTrackView>{
                   const Spacer(flex: 10,),
                   CircleAvatar(radius: 30, backgroundColor: Theme.of(context).colorScheme.secondary, child: IconButton(icon: Icon(Icons.shuffle, size: 30, color: Theme.of(context).colorScheme.tertiary,), onPressed: () {
                     setState(() {
-                      VideoDTO? temp;
-                      if(Holder.handler.currentTrack != null) {
-                        temp = Holder.handler.currentTrack;
-                        Holder.handler.videoDTOQueue.remove(Holder.handler.currentTrack);
-                      }
-                      Holder.handler.videoDTOQueue.shuffle();
-                      if(temp != null) Holder.handler.videoDTOQueue.add(temp);
+                      Holder.handler.changeShuffleMode();
                     });
                   },),),
                   const Spacer(flex: 4,),

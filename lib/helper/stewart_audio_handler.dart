@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,8 @@ class StewArtAudioHandler extends BaseAudioHandler {
   ValueNotifier<bool> currentTrackNotifier = ValueNotifier(true);
   VideoDTO? currentTrack;
   bool hasIncremented = false;
+
+  List<int> playedTracks = [];
 
   @override
   Future<void> play() async {
@@ -32,6 +35,20 @@ class StewArtAudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> skipToNext() async {
+
+    if(Holder.isRandomQueue.value) {
+      while(true) {
+        int nextIndex = Random().nextInt(videoDTOQueue.length);
+        if(!playedTracks.contains(nextIndex)) {
+          loadTrack(videoDTOQueue[nextIndex]);
+          playedTracks.add(nextIndex);
+          break;
+        }
+      }
+      if(playedTracks.length == videoDTOQueue.length) playedTracks = [];
+      return;
+    }
+
     if(videoDTOQueue.length > 1) {
       VideoDTO toPlay = videoDTOQueue.removeAt(0);
       if(!toPlay.isQueuedTrack) videoDTOQueue.add(toPlay);
@@ -39,7 +56,6 @@ class StewArtAudioHandler extends BaseAudioHandler {
       return;
     }
     if(videoDTOQueue.length == 1) loadTrack(videoDTOQueue.last);
-
   }
 
   Future<void> playNext() async {
@@ -57,6 +73,30 @@ class StewArtAudioHandler extends BaseAudioHandler {
       loadTrack(videoDTOQueue.last);
     }
     if(videoDTOQueue.length == 1) loadTrack(videoDTOQueue.last);
+  }
+
+  Future<void> changeShuffleMode() async {
+    Holder.isRandomQueue.value = !Holder.isRandomQueue.value;
+    if(Holder.isRandomQueue.value) {
+      playedTracks = [];
+      if(currentTrack != null) playedTracks.add(videoDTOQueue.indexOf(currentTrack!));
+    }
+    else {
+      if(videoDTOQueue.isEmpty || videoDTOQueue.length == 1) return;
+      if(currentTrack != null) {
+        int currentIndex = videoDTOQueue.indexOf(currentTrack!);
+        if(currentIndex == 0) {
+          videoDTOQueue.add(videoDTOQueue.removeAt(0));
+        }
+        else {
+          List<VideoDTO> newVideoDTOQueue = [];
+          newVideoDTOQueue.addAll(videoDTOQueue.sublist(currentIndex, videoDTOQueue.length));
+          newVideoDTOQueue.addAll(videoDTOQueue.sublist(0, currentIndex));
+          newVideoDTOQueue.add(newVideoDTOQueue.removeAt(0));
+          videoDTOQueue = newVideoDTOQueue;
+        }
+      }
+    }
   }
 
   Future<void> loadTrack(VideoDTO video) async {

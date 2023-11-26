@@ -96,7 +96,9 @@ Stream<double> savePlaylist(PlaylistDTO playlist, BuildContext dialogContext, Bu
 
   yield 0.0;
 
-  for(VideoDTO video in playlist.videos) {
+  List<VideoDTO> videos = VideoDTO.fromVideos(await youtube.playlists.getVideos(playlist.id).toList());
+
+  for(VideoDTO video in videos) {
 
     bool trackOnDisk = await trackExists(video.id);
     if(trackOnDisk) {
@@ -130,7 +132,8 @@ Stream<double> savePlaylist(PlaylistDTO playlist, BuildContext dialogContext, Bu
       await fileStream.close();
     }
   }
-  await db_loader.saveYoutubePlaylist(playlist);
+  await db_loader.saveYoutubePlaylist(playlist, videos);
+  youtube.close();
 }
 
 Future<StreamDTO> _saveAudio(String id) async {

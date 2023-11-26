@@ -15,10 +15,19 @@ class LocationDTO implements Comparable<LocationDTO>{
   }
 
   factory LocationDTO.fromJson(dynamic json) {
+
+    int tempLocation = json['location'];
+    String tempPlaylistName = json['playlistName'];
+    int tempIsInterpret = 0;
+
+    try {
+      tempIsInterpret = json['isInterpret'];
+    } catch (_) {}
+
     return LocationDTO(
-      location: json['location'],
-      isInterpret: json['isInterpret'],
-      playlistName: json['playlistName'],
+      location: tempLocation,
+      isInterpret: tempIsInterpret,
+      playlistName: tempPlaylistName,
 
     );
   }

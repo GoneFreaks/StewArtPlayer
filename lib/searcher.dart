@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stew_art_player/dto/location_dto.dart';
 import 'package:stew_art_player/dto/playlist_dto.dart';
 import 'package:stew_art_player/minor_widgets/playlist_widget.dart';
 import 'package:stew_art_player/minor_widgets/track_container.dart';
@@ -105,7 +106,8 @@ class SearcherState extends State<Searcher> {
       for(SearchResult result in searchList) {
         try {
           SearchPlaylist playlist = result as SearchPlaylist;
-          Holder.searchResultsPlaylist.add(PlaylistDTO.fromPlaylist(playlist, await youtube.playlists.getVideos(playlist.id).toList()));
+          if(playlist.thumbnails.isEmpty) continue;
+          Holder.searchResultsPlaylist.add(PlaylistDTO.fromPlaylist(playlist));
         } catch (_) {}
       }
       VideoSearchList search = await youtube.search.search(Holder.searchQuery!);
@@ -171,13 +173,12 @@ class SearcherState extends State<Searcher> {
   List<Widget> playlistToWidgetList(List<PlaylistDTO> playlists) {
     List<Widget> result = [];
     for(PlaylistDTO playlist in playlists) {
-      if(playlist.videos.isEmpty) continue;
       result.add(InkWell(
         onTap: () async {
-          YoutubeExplode youtube = YoutubeExplode();
           List<Widget> widgets = [];
-          for(VideoDTO video in playlist.videos) {
-            widgets.add(VideoWidget(video: video));
+          YoutubeExplode youtube = YoutubeExplode();
+          for(Video video in await youtube.playlists.getVideos(playlist.id).toList()) {
+            widgets.add(VideoWidget(video: VideoDTO.fromVideoWithLocation(video, LocationDTO(location: 3, isInterpret: 2, playlistName: ''))));
           }
           if(context.mounted) {
             showDialog(

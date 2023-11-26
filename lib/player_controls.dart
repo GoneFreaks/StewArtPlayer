@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:stew_art_player/dto/persist_state_dto.dart';
-import 'package:stew_art_player/dto/video_dto.dart';
 import 'package:stew_art_player/helper/network_image.dart';
 import 'dto/location_dto.dart';
 import 'dto/theme_dto.dart';
@@ -64,6 +63,7 @@ class _PlayerControlsState extends State<PlayerControls> {
       }
     });
     Holder.repeatCurrent.addListener(() {setState(() {});});
+    Holder.isRandomQueue.addListener((){setState(() {});});
   }
 
   @override
@@ -103,6 +103,12 @@ class _PlayerControlsState extends State<PlayerControls> {
   }
 
   Widget getDefaultControls() {
+
+    String belowTitleString = "";
+    if(Holder.handler.videoDTOQueue.isNotEmpty) belowTitleString = "Up next ${utils.shortMusicTitle(Holder.handler.videoDTOQueue.first)}";
+    if(Holder.isRandomQueue.value) belowTitleString = "SHUFFLE";
+    if(Holder.repeatCurrent.value) belowTitleString = "REPEAT";
+
     return Container(
       color: Theme.of(context).colorScheme.primary,
       height: 140,
@@ -121,7 +127,7 @@ class _PlayerControlsState extends State<PlayerControls> {
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                child: Text(Holder.repeatCurrent.value? "REPEAT" : Holder.handler.videoDTOQueue.isNotEmpty? "Up next ${utils.shortMusicTitle(Holder.handler.videoDTOQueue.first)}" : "", style: Theme.of(context).textTheme.bodySmall,),
+                child: Text(belowTitleString, style: Theme.of(context).textTheme.bodySmall,),
               ),
               Row(
                 children: [
@@ -175,13 +181,7 @@ class _PlayerControlsState extends State<PlayerControls> {
                       icon: Icon(Icons.shuffle, size: 25, color: ThemeDTO.getTextColor()),
                       onPressed: () {
                         setState(() {
-                          VideoDTO? temp;
-                          if(Holder.handler.currentTrack != null) {
-                            temp = Holder.handler.currentTrack;
-                            Holder.handler.videoDTOQueue.remove(Holder.handler.currentTrack);
-                          }
-                          Holder.handler.videoDTOQueue.shuffle();
-                          if(temp != null) Holder.handler.videoDTOQueue.add(temp);
+                          Holder.handler.changeShuffleMode();
                         });
                       },
                     ),
