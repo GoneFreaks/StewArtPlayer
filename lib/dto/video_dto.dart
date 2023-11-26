@@ -56,4 +56,12 @@ class VideoDTO implements Comparable<VideoDTO>{
     return VideoDTO(title: video.title, id: video.id.toString(), views: video.engagement.viewCount, duration: video.duration, thumbnailURL: video.thumbnails.lowResUrl, author: video.author, thumbnailURLHR: video.thumbnails.highResUrl, uploadDate: videoUpload, location: LocationDTO(location: 0, isInterpret: 1, playlistName: ''));
   }
 
+  static List<VideoDTO> fromVideos(List<Video> videos) {
+    List<VideoDTO> result = [];
+    for (Video video in videos) {
+      result.add(fromVideo(video));
+    }
+    return result;
+  }
+
 }

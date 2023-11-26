@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:animated_icon/animated_icon.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:stew_art_player/dto/theme_dto.dart';
 import 'dto/video_dto.dart';
 import 'helper/db_loader.dart' as db;
 import 'helper/stewart_audio_handler.dart';
@@ -20,10 +18,6 @@ class CustomSplashScreen extends StatefulWidget {
 
 class CustomSplashScreenState extends State<CustomSplashScreen>{
 
-  static const int colorCode = 50;
-  static const waitTimer = 1;
-  String loadText = '';
-
   @override
   void initState() {
     super.initState();
@@ -32,10 +26,6 @@ class CustomSplashScreenState extends State<CustomSplashScreen>{
 
   Future<void> initApp() async {
 
-
-    setState(() {
-      loadText = 'Config wird geladen ...';
-    });
     await db.initPreferences();
     await db.readUseInternet().then((value) => Holder.useInternet.value = value);
     await db.readAnimateText().then((value) => Holder.animateText.value = value);
@@ -45,19 +35,11 @@ class CustomSplashScreenState extends State<CustomSplashScreen>{
       Holder.theme.value = value;
       Holder.currentPosition.value = value;
     });
-    await Future.delayed(const Duration(seconds: waitTimer));
 
 
-    setState(() {
-      loadText = 'Datenbank wird initialisiert ...';
-    });
     await db.initDataBase();
-    await Future.delayed(const Duration(seconds: waitTimer));
 
 
-    setState(() {
-      loadText = 'Speicherbereinigung wird durchgeführt ...';
-    });
     Directory directory = await getApplicationDocumentsDirectory();
     List<FileSystemEntity> files = directory.listSync();
     files.retainWhere((element) => element.path.contains('m4a'));
@@ -78,9 +60,6 @@ class CustomSplashScreenState extends State<CustomSplashScreen>{
     }
 
 
-    setState(() {
-      loadText = 'AudioPlayer wird gestartet ...';
-    });
     Holder.handler = await AudioService.init(
       builder: () => StewArtAudioHandler(),
       config: const AudioServiceConfig(
@@ -89,7 +68,6 @@ class CustomSplashScreenState extends State<CustomSplashScreen>{
         androidNotificationOngoing: true,
       ),
     );
-
     await db.readMusicState().then((value) async {
       if(value != null) {
         List<VideoDTO> videos = [];
@@ -113,43 +91,21 @@ class CustomSplashScreenState extends State<CustomSplashScreen>{
         }
       }
     });
-    await Future.delayed(const Duration(seconds: waitTimer));
-
-
-    setState(() {
-      loadText = '';
-    });
-    await Future.delayed(const Duration(seconds: waitTimer));
 
 
     if(context.mounted) {
       Navigator.pop(context);
       Navigator.pushNamed(context, '/main');
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = ThemeDTO.themes[0].asTheme();
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, colorCode, colorCode, colorCode),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimateIcon(
-              iconType: IconType.continueAnimation,
-              animateIcon: AnimateIcons.loading6,
-              onTap: () {},
-              color: Colors.white,
-              width: 300,
-              height: 300,
-            ),
-            Text(loadText, style: theme.textTheme.titleMedium,),
-          ],
-        ),
-      ),
+      body: Container(
+        width: 200000,
+        color: Colors.black,
+      )
     );
   }
 }

@@ -25,7 +25,7 @@ class PlaylistWidgetState extends State<PlaylistWidget>{
           Stack(
             alignment: Alignment.bottomRight,
             children: [
-              Image.network(widget.playlist.videos.first.thumbnailURL),
+              Image.network(widget.playlist.thumbnail),
               FutureBuilder<bool>(
                 future: db.ytPlaylistExists(widget.playlist.id),
                 builder: (context, snapshot) {
@@ -57,7 +57,7 @@ class PlaylistWidgetState extends State<PlaylistWidget>{
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
-                Text('${widget.playlist.videos.length} Tracks', style: Theme.of(context).textTheme.bodySmall,),
+                Text('${widget.playlist.videoCount} Tracks', style: Theme.of(context).textTheme.bodySmall,),
                 const Spacer(),
               ],
             ),

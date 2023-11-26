@@ -40,7 +40,7 @@ class DownloadCenterIconState extends State<DownloadCenterIcon>{
               Navigator.pushNamed(context, '/download');
             },
             icon: const Icon(Icons.download),
-            iconSize: 35,
+            iconSize: 30,
           ),
         ),
         if(Holder.downloads.isNotEmpty) Align(

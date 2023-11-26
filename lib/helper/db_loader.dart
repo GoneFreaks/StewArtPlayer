@@ -59,9 +59,9 @@ void saveVideoDTO(VideoDTO video) async {
   db.insert("tracks", {"title": video.title, "id": video.id, "duration": video.duration!.inSeconds, "thumbnailURL": video.thumbnailURL, "author": video.author, "thumbnailURLHR": video.thumbnailURLHR, "upload": DateTime.now().millisecondsSinceEpoch, "viewCount": 0});
 }
 
-Future<void> saveYoutubePlaylist(PlaylistDTO youtubePlaylist) async {
+Future<void> saveYoutubePlaylist(PlaylistDTO youtubePlaylist, List<VideoDTO> videos) async {
   Batch batch = db.batch();
-  for(VideoDTO video in youtubePlaylist.videos) {
+  for(VideoDTO video in videos) {
     if(!youtubePlaylist.knownIds.contains(video.id)) batch.insert("pTracks", {"title": video.title, "id": video.id, "duration": video.duration!.inSeconds, "thumbnailURL": video.thumbnailURL, "author": video.author, "thumbnailURLHR": video.thumbnailURLHR, "upload": DateTime.now().millisecondsSinceEpoch, "viewCount": 0});
     batch.insert("pPlaylists", {"name" : youtubePlaylist.title, "id": video.id, "playlistID": youtubePlaylist.id});
   }
