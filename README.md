@@ -1,14 +1,14 @@
 # StewArt
 
 ## Motivation
-The main idea is to develop an app to use the Discord-Bot Gruwie on your phone.
+The main idea was to develop an app pretty close to the self made Discord-Bot Gruwie in terms of functionality.
 This concept was changed pretty soon in order to better match the use-cases.
 
 ## Basic Functionality
 The backbone of this whole app is build around two major packages:
 - Youtube Explode Dart
 - Just Audio
-this results in the following base concept:
+## This results in the following base concept:
 - search Youtube-Videos
 - download and save those videos (as audio-files)
 - play the saved audio-files
@@ -16,9 +16,9 @@ this results in the following base concept:
 - ...
 
 ## Roadmap
-1. Download and save Youtube-Playlists
+1. ~~Download and save Youtube-Playlists~~
 2. Last used app-tab should be memorized in order to restore it after the app has been closed
-3. Lazy loading for youtube-playlists, load youtube-playlist content only if requested
+3. ~~Lazy loading for youtube-playlists, load youtube-playlist content only if requested~~
 4. Search/Download videos via a given URL
 5. Fix the no-internet banner, in the background of the media-controls
 6. Change the system behind shuffle, in order to make it reversible
