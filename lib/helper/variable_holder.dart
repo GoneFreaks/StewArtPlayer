@@ -39,6 +39,7 @@ class Holder {
 //Handler
   static final ValueNotifier<bool> newThumbnail = ValueNotifier(false);
   static final ValueNotifier<bool> repeatCurrent = ValueNotifier(false);
+  static final ValueNotifier<bool> isRandomQueue = ValueNotifier(false);
 
 //Download-Center
   static final ValueNotifier<bool> newDownload = ValueNotifier(false);

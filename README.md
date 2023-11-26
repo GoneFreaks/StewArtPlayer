@@ -21,7 +21,7 @@ The backbone of this whole app is build around two major packages:
 3. ~~Lazy loading for youtube-playlists, load youtube-playlist content only if requested~~
 4. Search/Download videos via a given URL
 5. Fix the no-internet banner, in the background of the media-controls
-6. Change the system behind shuffle, in order to make it reversible
+6. ~~Change the system behind shuffle, in order to make it reversible~~
 7. Rebuild the LocalTrackView after a track has been edited/deleted
 8. Improve the title-shortening system
 9. Add user driven backup
